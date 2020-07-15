@@ -1,0 +1,75 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+	<style>
+	  .citymap{
+	  width: 100%;
+	  height: 100%;
+	  }
+	</style>
+  	<!-- <script src="https://pyecharts.github.io/jupyter-echarts/echarts/echarts.min.js"></script> -->
+  	<script src="static/echarts/echarts.min.js"></script>
+  </head>
+  <body>
+        <!-- prepare a DOM container with width and height -->
+        <div id="main" style="width: 90vw;height:90vh;"></div>
+        <script type="text/javascript">
+            // based on prepared DOM, initialize echarts instance
+            var myChart = echarts.init(document.getElementById('main'));
+            // specify chart configuration item and data
+// ================================================================
+var data = [{
+    fixed: true,
+    x: myChart.getWidth() / 2,
+    y: myChart.getHeight() / 2,
+    symbolSize: 20,
+    id: '-1'
+}];
+
+var edges = [];
+
+option = {
+    series: [{
+        type: 'graph',
+        layout: 'force',
+        animation: false,
+        data: data,
+        force: {
+            // initLayout: 'circular'
+            // gravity: 0
+            repulsion: 999,
+            edgeLength: 5
+        },
+        edges: edges
+    }]
+};
+
+setInterval(function () {
+    data.push({
+        id: data.length
+    });
+    var source = Math.round((data.length - 1) * Math.random());
+    var target = Math.round((data.length - 1) * Math.random());
+    if (source !== target) {
+        edges.push({
+            source: source,
+            target: target
+        });
+    }
+    myChart.setOption({
+        series: [{
+            roam: true,
+            data: data,
+            edges: edges
+        }]
+    });
+
+    // console.log('nodes: ' + data.length);
+    // console.log('links: ' + data.length);
+}, 1500);
+// ================================================================
+            // use configuration item and data specified to show chart
+            myChart.setOption(option);
+        </script>
+    </body>
+</html>

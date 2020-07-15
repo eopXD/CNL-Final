@@ -1,0 +1,103 @@
+<!-- prepare a DOM container with width and height -->
+<div id="main" style="width: 90vw; height:90vh; border: 1px;"></div>
+<script type="text/javascript">
+    // based on prepared DOM, initialize echarts instance
+    var myChart = echarts.init(document.getElementById('main'));
+    // specify chart configuration item and data
+// ================================================================
+data = [];
+edges = [];
+
+option = {
+    tooltip : {
+        trigger: 'item'
+    },
+    series: [{
+        type: 'graph',
+        layout: 'force',
+        animation: false,
+        data: data,
+        force: {
+            // initLayout: 'circular'
+            gravity: 1.0,
+            repulsion: 999,
+            edgeLength: 5
+        },
+        edges: edges,
+    }],
+    
+};
+function add_point(x0, y0, color, is_fixed) {
+    // y = -y0;
+    // x = x0;
+    y = x0;
+    x = y0;
+    var data_point = {
+        id: data.length,
+        fixed: is_fixed,
+        x: x,
+        y: y,
+        symbolSize: 20,
+        itemStyle: {
+            color: color
+        },
+        label: {
+            normal: {
+                show: true
+            }
+        },
+        tooltip: {
+            show: true,
+            trigger: 'item',
+            formatter: 'XD',
+            showContent: true,
+            alwaysShowContent: true,
+            triggerOn: 'mousemove',
+            trigger: 'axis',
+            axisPointer: {
+                label: {
+                    show: true,
+                }
+            }
+        },
+    };
+    // if (is_fixed) {
+    //     data_point.fixed = true;
+    //     data_point.symbolSize = 20;
+    //     data_point.id = -1;
+    // }
+    data.push(data_point);
+}
+function add_floating() {
+    var x = 200+100*(Math.random()-0.5);
+    var y = 200+100*(Math.random()-0.5);
+    console.log('nodes: ' + data.length);
+    console.log('links: ' + data.length);
+    add_point(x, y, '#f99');
+    // var source = Math.round((data.length - 1) * Math.random());
+    // var target = Math.round((data.length - 1) * Math.random());
+    // if (source !== target) {
+    //     edges.push({
+    //         source: source,
+    //         target: target
+    //     });
+    // }
+    myChart.setOption({
+        series: [{
+            type: 'graph',
+            roam: true,
+            data: data,
+            edges: edges
+        }]
+    });
+}
+// setInterval(add_floating, 5000);
+// add_floating();
+% for x, y, color in init_point_list:
+add_point(${x}, ${y}, '${color}', true);
+% endfor
+// ================================================================
+// use configuration item and data specified to show chart
+myChart.setOption(option);
+console.log(myChart);
+</script>

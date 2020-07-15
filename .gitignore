@@ -1,0 +1,10 @@
+echarts/*
+dist/*
+*.sqlite3*
+*.pyc
+*.ipynb
+lagcy/*
+archive/*
+static/*
+release/cnl.mp4
+demo_screen.mov
